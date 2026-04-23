@@ -10,7 +10,7 @@ from openai import OpenAI
 
 from .schema import Receipt, ReceiptExtraction
 
-MODEL = "gpt-41-mini"
+MODEL = "gpt-4.1-mini"
 
 SYSTEM_PROMPT = """너는 한국 공무원 출장 교통 영수증을 판독해 e-사람 여비 정산 필드로 추출하는 어시스턴트다.
 
