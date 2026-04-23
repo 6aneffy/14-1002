@@ -227,6 +227,30 @@ def _fill_settlement_sheet(
     fare_total = sum(r.amount for r in receipts)
     ws["G18"] = fare_total
 
+    # 수식 셀을 직접 계산값으로 덮어쓰기 → Protected View에서도 값이 표시됨
+    i18 = (
+        meta.per_diem_cash
+        + meta.meal_cash
+        + meta.lodging_fixed_cash
+        + meta.lodging_actual_cash
+        + fare_total
+    )
+    i19 = (
+        meta.per_diem_card
+        + meta.meal_card
+        + meta.lodging_fixed_card
+        + meta.lodging_actual_card
+    )
+    ws["I18"] = i18
+    ws["I19"] = i19
+    ws["I20"] = i18 + i19
+    ws["C20"] = meta.per_diem_cash + meta.per_diem_card
+    ws["D20"] = meta.meal_cash + meta.meal_card
+    ws["E20"] = meta.lodging_fixed_cash + meta.lodging_fixed_card
+    ws["F20"] = meta.lodging_actual_cash + meta.lodging_actual_card
+    ws["G20"] = fare_total
+    ws["K20"] = meta.prepaid_cash + meta.prepaid_card
+
     ws["A26"] = meta.traveler_name
     ws["B26"] = meta.affiliation
     ws["F26"] = meta.position
