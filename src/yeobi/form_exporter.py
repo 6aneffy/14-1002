@@ -241,15 +241,40 @@ def _fill_settlement_sheet(
         + meta.lodging_fixed_card
         + meta.lodging_actual_card
     )
+    i20 = i18 + i19
+    c20 = meta.per_diem_cash + meta.per_diem_card
+    d20 = meta.meal_cash + meta.meal_card
+    e20 = meta.lodging_fixed_cash + meta.lodging_fixed_card
+    f20 = meta.lodging_actual_cash + meta.lodging_actual_card
+    g20 = fare_total
+    k20 = meta.prepaid_cash + meta.prepaid_card
+
+    # 행18~20 소계 수식 셀
     ws["I18"] = i18
     ws["I19"] = i19
-    ws["I20"] = i18 + i19
-    ws["C20"] = meta.per_diem_cash + meta.per_diem_card
-    ws["D20"] = meta.meal_cash + meta.meal_card
-    ws["E20"] = meta.lodging_fixed_cash + meta.lodging_fixed_card
-    ws["F20"] = meta.lodging_actual_cash + meta.lodging_actual_card
-    ws["G20"] = fare_total
-    ws["K20"] = meta.prepaid_cash + meta.prepaid_card
+    ws["I20"] = i20
+    ws["C20"] = c20
+    ws["D20"] = d20
+    ws["E20"] = e20
+    ws["F20"] = f20
+    ws["G20"] = g20
+    ws["K20"] = k20
+
+    # 행27 참조 수식 셀 (=E20, =F20, =G20, =I20, =K20)
+    ws["C27"] = e20
+    ws["D27"] = f20
+    ws["E27"] = g20
+    ws["G27"] = i20
+    ws["I27"] = k20
+
+    # 숙박 합계 (G34 = SUM(G31:G33))
+    lodging_amount_total = sum(
+        row.get("amount", 0) or 0 for row in meta.lodging_rows[:3]
+    )
+    ws["G34"] = lodging_amount_total
+
+    # 영수증 운임 합계 (H43 = SUM(H38:H42))
+    ws["H43"] = fare_total
 
     ws["A26"] = meta.traveler_name
     ws["B26"] = meta.affiliation
